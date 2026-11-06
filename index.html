@@ -4,7 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>R78 Football Game</title>
+<meta name="theme-color" content="#071426">
+<title>R78 Football Game | QAM</title>
 
 <style>
 * {
@@ -13,26 +14,126 @@
 
 body {
     margin: 0;
-    background: #071426;
+    min-height: 100vh;
+    padding: 20px;
+    background: radial-gradient(circle at top, #102b50, #050b17 75%);
     color: white;
     font-family: Arial, sans-serif;
     text-align: center;
-    padding: 20px;
-}
-
-h1 {
-    color: #38aaff;
-    letter-spacing: 2px;
 }
 
 .game {
-    max-width: 500px;
+    width: 100%;
+    max-width: 520px;
     margin: auto;
+}
+
+.brand {
+    color: #38aaff;
+    font-size: 13px;
+    letter-spacing: 5px;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: clamp(28px, 7vw, 42px);
+    margin: 10px 0;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+.highlight {
+    color: #38aaff;
+}
+
+.subtitle {
+    color: #a9bdd6;
+    margin-bottom: 25px;
+}
+
+.panel {
+    background: #101e32;
+    border: 1px solid #294363;
+    border-radius: 18px;
+    padding: 24px 16px;
+    box-shadow: 0 12px 35px #0006;
+}
+
+.menu-icon {
+    font-size: 75px;
+    margin: 15px 0;
+}
+
+.description {
+    color: #b4c5da;
+    line-height: 1.6;
+}
+
+button {
+    border: none;
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #168cff, #0862d5);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.15);
+}
+
+button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.start-btn {
+    width: 100%;
+    margin-top: 20px;
+    font-size: 17px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.scoreboard {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.stat {
+    flex: 1;
+    padding: 14px 8px;
+    background: #132945;
+    border: 1px solid #294363;
+    border-radius: 12px;
+}
+
+.stat strong {
+    display: block;
+    font-size: 28px;
+    color: #38aaff;
+}
+
+.stat span {
+    font-size: 12px;
+    color: #a9bdd6;
 }
 
 .pitch {
     position: relative;
-    height: 310px;
+    height: 320px;
+    overflow: hidden;
+    border: 4px solid white;
+    border-radius: 13px;
     background: repeating-linear-gradient(
         0deg,
         #168344,
@@ -40,25 +141,45 @@ h1 {
         #11743a 50px,
         #11743a 100px
     );
-    border: 4px solid white;
-    border-radius: 12px;
-    overflow: hidden;
+    box-shadow: 0 8px 25px #0007;
+}
+
+.pitch::before {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 85px;
+    border: 2px solid #ffffff75;
+    border-top: none;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.pitch::after {
+    content: "";
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border: 2px solid #ffffff65;
+    border-radius: 50%;
+    top: 115px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .goal {
     position: absolute;
     top: 8px;
-    left: 25%;
-    width: 50%;
-    height: 110px;
+    left: 23%;
+    width: 54%;
+    height: 112px;
     border: 6px solid white;
     border-bottom: 3px solid white;
-    background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 10px,
-        #ffffff44 11px
-    );
+    background:
+        repeating-linear-gradient(45deg, transparent 0 9px, #ffffff35 10px 11px),
+        repeating-linear-gradient(-45deg, transparent 0 9px, #ffffff35 10px 11px);
+    z-index: 1;
 }
 
 .keeper {
@@ -67,127 +188,315 @@ h1 {
     left: 50%;
     transform: translateX(-50%);
     font-size: 48px;
+    z-index: 3;
     transition: left 0.45s ease, transform 0.45s ease;
-    z-index: 2;
 }
 
 .ball {
     position: absolute;
-    bottom: 20px;
+    bottom: 22px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 35px;
-    transition: all 0.55s ease;
-    z-index: 3;
+    font-size: 36px;
+    z-index: 4;
+    transition: all 0.55s cubic-bezier(.2,.7,.3,1);
 }
 
 .ball.shoot-left {
     left: 32%;
     bottom: 205px;
-    transform: translateX(-50%) scale(0.7);
+    transform: translateX(-50%) scale(.7) rotate(360deg);
 }
 
 .ball.shoot-center {
     left: 50%;
     bottom: 205px;
-    transform: translateX(-50%) scale(0.7);
+    transform: translateX(-50%) scale(.7) rotate(360deg);
 }
 
 .ball.shoot-right {
     left: 68%;
     bottom: 205px;
-    transform: translateX(-50%) scale(0.7);
+    transform: translateX(-50%) scale(.7) rotate(360deg);
 }
 
 .controls {
     display: flex;
-    gap: 10px;
-    justify-content: center;
+    gap: 9px;
     margin: 20px 0;
 }
 
-button {
-    background: #168cff;
-    color: white;
-    border: none;
-    padding: 13px 20px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button:disabled {
-    opacity: 0.5;
+.controls button {
+    flex: 1;
+    padding: 14px 5px;
 }
 
 #message {
-    min-height: 30px;
-    font-size: 20px;
+    min-height: 35px;
+    margin: 15px 0;
+    font-size: 19px;
     font-weight: bold;
     color: #ffd84d;
 }
 
-#restart {
-    background: #13a05b;
-    display: none;
+.secondary {
+    background: #183452;
+    border: 1px solid #385777;
 }
 
-.score {
-    font-size: 18px;
-    margin: 15px;
+#restart {
+    background: linear-gradient(135deg, #13a05b, #087c43);
+    width: 100%;
+    margin-top: 10px;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.sound-btn {
+    padding: 9px 12px;
+    font-size: 13px;
+}
+
+.footer {
+    color: #7890ac;
+    font-size: 12px;
+    margin-top: 25px;
 }
 </style>
-
-<meta name="google-site-verification" content="5SkJGSHTn2AAqjC2-G3PYamhs6UyxvnThmpKX-sYuuQ" />
-
 </head>
 
 <body>
 
 <div class="game">
-    <h1>R78 FOOTBALL GAME</h1>
-    <p>Penalty Shootout ⚽</p>
 
-    <div class="score">
-        Goals: <span id="score">0</span> |
-        Shots: <span id="shots">0</span>/5
+    <div class="brand">QAM PRESENTS</div>
+    <h1>R78 <span class="highlight">FOOTBALL</span></h1>
+    <p class="subtitle">THE PENALTY SHOOTOUT</p>
+
+    <!-- MAIN MENU -->
+    <section id="menu" class="panel">
+        <div class="menu-icon">⚽</div>
+        <h2>READY TO SHOOT?</h2>
+        <p class="description">
+            Take your position, choose your direction
+            and score as many goals as possible!
+        </p>
+        <p class="description">5 Shots · 1 Match · Your Challenge</p>
+        <button class="start-btn" onclick="startGame()">
+            START MATCH ⚡
+        </button>
+    </section>
+
+    <!-- GAME SCREEN -->
+    <section id="gameScreen" class="hidden">
+
+        <div class="top-bar">
+            <button class="secondary sound-btn" id="soundBtn"
+                onclick="toggleSound()">🔊 SOUND ON</button>
+            <button class="secondary sound-btn"
+                onclick="showMenu()">MAIN MENU</button>
+        </div>
+
+        <div class="difficulty">
+    <p>SELECT DIFFICULTY</p>
+    <button onclick="setDifficulty('easy')">EASY</button>
+    <button onclick="setDifficulty('medium')">MEDIUM</button>
+    <button onclick="setDifficulty('hard')">HARD</button>
+</div>
+
+        <div class="scoreboard">
+            <div class="stat">
+                <strong id="score">0</strong>
+                <span>GOALS</span>
+            </div>
+
+            <div class="stat">
+                <strong id="shots">0/5</strong>
+                <span>SHOTS</span>
+            </div>
+
+            <div class="stat">
+                <strong id="accuracy">0%</strong>
+                <span>ACCURACY</span>
+            </div>
+        
+            <div class="stat">
+                <strong id="timer">60</strong>
+                <span>SECONDS</span>
+            </div>
+        
+        </div>
+
+        <div class="pitch">
+            <div class="goal"></div>
+            <div class="keeper" id="keeper">🧤</div>
+            <div class="ball" id="ball">⚽</div>
+        </div>
+
+        <div class="controls">
+            <button onclick="shoot('left')" class="shotBtn">⬅ LEFT</button>
+            <button onclick="shoot('center')" class="shotBtn">CENTER</button>
+            <button onclick="shoot('right')" class="shotBtn">RIGHT ➡</button>
+        </div>
+
+        <div id="message">Choose your shot!</div>
+
+        <button id="restart" onclick="restartGame()" class="hidden">
+            PLAY AGAIN ↻
+        </button>
+
+    </section>
+
+    <div class="footer">
+        R78 FOOTBALL GAME · CREATED BY QANBER ALI MUGHAL
+        <p>Creating My Own Legacy.</p>
     </div>
 
-    <div class="pitch">
-        <div class="goal"></div>
-        <div class="keeper" id="keeper">🧤</div>
-        <div class="ball" id="ball">⚽</div>
-    </div>
-
-    <div class="controls">
-        <button onclick="shoot('left')">LEFT</button>
-        <button onclick="shoot('center')">CENTER</button>
-        <button onclick="shoot('right')">RIGHT</button>
-    </div>
-
-    <div id="message">Choose your shot!</div>
-
-    <button id="restart" onclick="restartGame()">PLAY AGAIN</button>
 </div>
 
 <script>
 let score = 0;
 let shots = 0;
-let playing = true;
+let timeLeft = 60;
+let timerInterval = null;
+let difficulty = "medium";
+let playing = false;
+let soundEnabled = true;
+let audioContext = null;
+
+const menu = document.getElementById("menu");
+const gameScreen = document.getElementById("gameScreen");
+const ball = document.getElementById("ball");
+const keeper = document.getElementById("keeper");
+const message = document.getElementById("message");
+
+function playSound(type) {
+    if (!soundEnabled) return;
+
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+
+        if (!audioContext) {
+            audioContext = new AudioContext();
+        }
+
+        if (audioContext.state === "suspended") {
+            audioContext.resume();
+        }
+
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        if (type === "goal") {
+            oscillator.type = "sawtooth";
+            oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(
+                850, audioContext.currentTime + 0.35
+            );
+        } else {
+            oscillator.type = "triangle";
+            oscillator.frequency.setValueAtTime(280, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(
+                120, audioContext.currentTime + 0.3
+            );
+        }
+
+        gain.gain.setValueAtTime(0.12, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(
+            0.001, audioContext.currentTime + 0.4
+        );
+
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.4);
+
+    } catch (error) {
+        console.log("Audio unavailable");
+    }
+}
+
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+
+    document.getElementById("soundBtn").textContent =
+        soundEnabled ? "🔊 SOUND ON" : "🔇 SOUND OFF";
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+
+    timerInterval = setInterval(() => {
+        if (!playing) return;
+
+        timeLeft--;
+        document.getElementById("timer").textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            playing = false;
+            disableButtons(true);
+
+            message.textContent =
+                "TIME UP! 🏆 " + score + "/5 GOALS";
+
+            document.getElementById("restart").classList.remove("hidden");
+        }
+    }, 1000);
+}
+
+function setDifficulty(level) {
+    difficulty = level;
+
+    message.textContent =
+        "Difficulty: " + level.toUpperCase();
+}
+
+function startGame() {
+    menu.classList.add("hidden");
+    gameScreen.classList.remove("hidden");
+    restartGame();
+    startTimer();
+}
+
+function showMenu() {
+    playing = false;
+    menu.classList.remove("hidden");
+    gameScreen.classList.add("hidden");
+}
 
 function shoot(direction) {
     if (!playing) return;
 
     playing = false;
-
-    const ball = document.getElementById("ball");
-    const keeper = document.getElementById("keeper");
-    const message = document.getElementById("message");
+    disableButtons(true);
 
     const directions = ["left", "center", "right"];
-    const keeperDirection =
-        directions[Math.floor(Math.random() * 3)];
+
+    let keeperDirection;
+
+const saveChance =
+    difficulty === "easy" ? 0.20 :
+    difficulty === "hard" ? 0.50 : 0.33;
+
+if (Math.random() < saveChance) {
+    keeperDirection = direction;
+} else {
+    const otherDirections = directions.filter(
+        d => d !== direction
+    );
+
+    keeperDirection = otherDirections[
+        Math.floor(Math.random() * otherDirections.length)
+    ];
+}
 
     ball.className = "ball";
     void ball.offsetWidth;
@@ -209,38 +518,69 @@ function shoot(direction) {
         if (direction !== keeperDirection) {
             score++;
             message.textContent = "GOOOAL! 🔥";
+            playSound("goal");
         } else {
             message.textContent = "SAVED! 🧤";
+            playSound("save");
         }
 
-        document.getElementById("score").textContent = score;
-        document.getElementById("shots").textContent = shots;
+        updateScoreboard();
 
         if (shots >= 5) {
+            clearInterval(timerInterval);
             playing = false;
-            document.getElementById("restart").style.display = "inline-block";
-            message.textContent += " Match Over! Final Score: " + score + "/5";
+
+            const percentage = Math.round((score / 5) * 100);
+
+            message.textContent =
+                "MATCH OVER! 🏆 " + score + "/5 GOALS";
+
+            document.getElementById("restart").classList.remove("hidden");
+
         } else {
             playing = true;
+            disableButtons(false);
         }
-    }, 600);
+
+    }, 650);
+}
+
+function updateScoreboard() {
+    document.getElementById("score").textContent = score;
+    document.getElementById("shots").textContent = shots + "/5";
+
+    const percentage = shots === 0 ? 0 :
+        Math.round((score / shots) * 100);
+
+    document.getElementById("accuracy").textContent =
+        percentage + "%";
+}
+
+function disableButtons(disabled) {
+    document.querySelectorAll(".shotBtn").forEach(button => {
+        button.disabled = disabled;
+    });
 }
 
 function restartGame() {
     score = 0;
     shots = 0;
+    timeLeft = 60;
+    document.getElementById("timer").textContent = timeLeft;
     playing = true;
 
-    document.getElementById("score").textContent = 0;
-    document.getElementById("shots").textContent = 0;
-    document.getElementById("message").textContent = "Choose your shot!";
-    document.getElementById("restart").style.display = "none";
+    updateScoreboard();
 
-    document.getElementById("ball").className = "ball";
+    message.textContent = "Choose your shot!";
 
-    const keeper = document.getElementById("keeper");
+    document.getElementById("restart").classList.add("hidden");
+
+    ball.className = "ball";
+
     keeper.style.left = "50%";
     keeper.style.transform = "translateX(-50%)";
+
+    disableButtons(false);
 }
 </script>
 
