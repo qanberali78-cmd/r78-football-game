@@ -267,6 +267,25 @@ button:disabled {
     font-size: 12px;
     margin-top: 25px;
 }
+
+.goal-celebration {
+    animation: goalPop 0.7s ease-in-out;
+    color: #00ff88 !important;
+    text-shadow: 0 0 15px #00ff88;
+}
+
+@keyframes goalPop {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.5);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 </style>
 </head>
 
@@ -309,8 +328,8 @@ button:disabled {
     <button onclick="setDifficulty('hard')">HARD</button>
 </div>
 
-        <div class="scoreboard">
-            <div class="stat">
+        
+        .<div class="scoreboard"> <div class="stat">
                 <strong id="score">0</strong>
                 <span>GOALS</span>
             </div>
@@ -328,6 +347,11 @@ button:disabled {
             <div class="stat">
                 <strong id="timer">60</strong>
                 <span>SECONDS</span>
+            </div>
+        
+            <div class="stat">
+               <strong id="bestScore">0</strong>
+               <span>BEST SCORE</span>
             </div>
         
         </div>
@@ -350,6 +374,14 @@ button:disabled {
             PLAY AGAIN ↻
         </button>
 
+    <div id="resultScreen" class="hidden">
+    <h2>🏆 MATCH RESULT</h2>
+
+    <p>Total Goals: <strong id="finalGoals">0/5</strong></p>
+    <p>Accuracy: <strong id="finalAccuracy">0%</strong></p>
+    <p>Best Score: <strong id="finalBestScore">0</strong></p>
+</div>
+   
     </section>
 
     <div class="footer">
@@ -363,8 +395,14 @@ button:disabled {
 let score = 0;
 let shots = 0;
 let timeLeft = 60;
+let bestScore = Number(localStorage.getItem("r78BestScore")) || 0;
+
+document.getElementById("bestScore").textContent = bestScore;
+
 let timerInterval = null;
 let difficulty = "medium";
+let lastShotDirection = null;
+let sameDirectionCount = 0;
 let playing = false;
 let soundEnabled = true;
 let audioContext = null;
@@ -472,6 +510,7 @@ function showMenu() {
     gameScreen.classList.add("hidden");
 }
 
+ 
 function shoot(direction) {
     if (!playing) return;
 
@@ -482,9 +521,27 @@ function shoot(direction) {
 
     let keeperDirection;
 
-const saveChance =
+if (direction === lastShotDirection) {
+    sameDirectionCount++;
+} else {
+    sameDirectionCount = 1;
+}
+
+lastShotDirection = direction;
+
+const baseSaveChance =
     difficulty === "easy" ? 0.20 :
     difficulty === "hard" ? 0.50 : 0.33;
+
+const learningBonus = Math.min(
+    (sameDirectionCount - 1) * 0.15,
+    0.30
+);
+
+const saveChance = Math.min(
+    baseSaveChance + learningBonus,
+    0.75
+);
 
 if (Math.random() < saveChance) {
     keeperDirection = direction;
@@ -498,6 +555,17 @@ if (Math.random() < saveChance) {
     ];
 }
 
+if (Math.random() < saveChance) {
+    keeperDirection = direction;
+} else {
+    const otherDirections = directions.filter(
+        d => d !== direction
+    );
+
+    keeperDirection = otherDirections[
+        Math.floor(Math.random() * otherDirections.length)
+    ];
+}
     ball.className = "ball";
     void ball.offsetWidth;
     ball.classList.add("shoot-" + direction);
@@ -517,7 +585,15 @@ if (Math.random() < saveChance) {
     setTimeout(() => {
         if (direction !== keeperDirection) {
             score++;
+            if (score > bestScore) {
+    bestScore = score;
+    localStorage.setItem("r78BestScore", bestScore);
+    document.getElementById("bestScore").textContent = bestScore;
+}
             message.textContent = "GOOOAL! 🔥";
+            message.classList.remove("goal-celebration");
+void message.offsetWidth;
+message.classList.add("goal-celebration");
             playSound("goal");
         } else {
             message.textContent = "SAVED! 🧤";
@@ -535,11 +611,21 @@ if (Math.random() < saveChance) {
             message.textContent =
                 "MATCH OVER! 🏆 " + score + "/5 GOALS";
 
-            document.getElementById("restart").classList.remove("hidden");
+          document.getElementById("finalGoals").textContent = score + "/5";
+
+document.getElementById("finalAccuracy").textContent =
+    Math.round((score / 5) * 100) + "%";
+
+document.getElementById("finalBestScore").textContent = bestScore;
+
+document.getElementById("resultScreen").classList.remove("hidden");
+          
+                document.getElementById("restart").classList.remove("hidden");
 
         } else {
             playing = true;
             disableButtons(false);
+            startTimer();
         }
 
     }, 650);
