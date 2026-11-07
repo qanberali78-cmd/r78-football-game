@@ -504,13 +504,54 @@ function startGame() {
     startTimer();
 }
 
+
 function showMenu() {
     playing = false;
     menu.classList.remove("hidden");
     gameScreen.classList.add("hidden");
 }
 
- 
+function playEffect(notes) {
+    try {
+        if (!audioContext) {
+            const AudioContextClass =
+                window.AudioContext || window.webkitAudioContext;
+
+            if (!AudioContextClass) return;
+
+            audioContext = new AudioContextClass();
+        }
+
+        if (audioContext.state === "suspended") {
+            audioContext.resume();
+        }
+
+        notes.forEach((note, index) => {
+            const oscillator = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+
+            oscillator.type = "sine";
+            oscillator.frequency.value = note;
+
+            const startTime = audioContext.currentTime + index * 0.16;
+
+            gain.gain.setValueAtTime(0.15, startTime);
+            gain.gain.exponentialRampToValueAtTime(
+                0.001,
+                startTime + 0.3
+            );
+
+            oscillator.connect(gain);
+            gain.connect(audioContext.destination);
+
+            oscillator.start(startTime);
+            oscillator.stop(startTime + 0.3);
+        });
+    } catch (error) {
+        console.error("Audio error:", error);
+    }
+}
+
 function shoot(direction) {
     if (!playing) return;
 
@@ -591,12 +632,14 @@ if (Math.random() < saveChance) {
     document.getElementById("bestScore").textContent = bestScore;
 }
             message.textContent = "GOOOAL! 🔥";
+            playEffect([660, 880, 1100]);
             message.classList.remove("goal-celebration");
 void message.offsetWidth;
 message.classList.add("goal-celebration");
             playSound("goal");
         } else {
             message.textContent = "SAVED! 🧤";
+            playEffect([500, 350, 250]);
             playSound("save");
         }
 
@@ -611,7 +654,9 @@ message.classList.add("goal-celebration");
             message.textContent =
                 "MATCH OVER! 🏆 " + score + "/5 GOALS";
 
-          document.getElementById("finalGoals").textContent = score + "/5";
+                playEffect([523, 659, 784, 1047]);
+         
+                document.getElementById("finalGoals").textContent = score + "/5";
 
 document.getElementById("finalAccuracy").textContent =
     Math.round((score / 5) * 100) + "%";
