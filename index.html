@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,315 +8,413 @@
 <title>R78 Football Game | QAM</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;padding:20px;background:radial-gradient(circle at top,#102b50,#050b17 75%);color:#fff;font-family:Arial,sans-serif;text-align:center}
-.game{width:100%;max-width:560px;margin:auto}
-.brand{color:#38aaff;font-size:13px;letter-spacing:5px;font-weight:bold}
-h1{font-size:clamp(28px,7vw,42px);margin:10px 0;letter-spacing:2px}
-.highlight{color:#38aaff}.subtitle{color:#a9bdd6;margin-bottom:25px}
-.panel{background:#101e32;border:1px solid #294363;border-radius:18px;padding:24px 16px;box-shadow:0 12px 35px #0006}
-.menu-icon{font-size:75px;margin:15px 0}.description{color:#b4c5da;line-height:1.6}
-button{border:none;border-radius:10px;padding:14px 20px;font-size:15px;font-weight:bold;color:#fff;background:linear-gradient(135deg,#168cff,#0862d5);cursor:pointer;transition:.2s}
-button:hover{transform:translateY(-2px);filter:brightness(1.15)}
-button:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.start-btn{width:100%;margin-top:20px;font-size:17px}.hidden{display:none!important}
-.scoreboard{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:18px 0}
-.stat{padding:12px 6px;background:#132945;border:1px solid #294363;border-radius:12px}
-.stat strong{display:block;font-size:26px;color:#38aaff}.stat span{font-size:11px;color:#a9bdd6}
-.pitch{position:relative;height:320px;overflow:hidden;border:4px solid white;border-radius:13px;background:repeating-linear-gradient(0deg,#168344,#168344 50px,#11743a 50px,#11743a 100px);box-shadow:0 8px 25px #0007}
-.pitch:before{content:"";position:absolute;width:180px;height:85px;border:2px solid #ffffff75;border-top:none;bottom:0;left:50%;transform:translateX(-50%)}
-.pitch:after{content:"";position:absolute;width:90px;height:90px;border:2px solid #ffffff65;border-radius:50%;top:115px;left:50%;transform:translateX(-50%)}
-.goal{position:absolute;top:8px;left:23%;width:54%;height:112px;border:6px solid white;border-bottom:3px solid white;background:repeating-linear-gradient(45deg,transparent 0 9px,#ffffff35 10px 11px),repeating-linear-gradient(-45deg,transparent 0 9px,#ffffff35 10px 11px);z-index:1}
-.keeper{position:absolute;top:48px;left:50%;transform:translateX(-50%);font-size:48px;z-index:3;transition:left .45s ease,transform .45s ease}
-.ball{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-size:36px;z-index:4;transition:all .55s cubic-bezier(.2,.7,.3,1)}
-.ball.shoot-left{left:32%;bottom:205px;transform:translateX(-50%) scale(.7) rotate(360deg)}
-.ball.shoot-center{left:50%;bottom:205px;transform:translateX(-50%) scale(.7) rotate(360deg)}
-.ball.shoot-right{left:68%;bottom:205px;transform:translateX(-50%) scale(.7) rotate(360deg)}
-.controls{display:flex;gap:9px;margin:20px 0}.controls button{flex:1;padding:14px 5px}
-#message{min-height:35px;margin:15px 0;font-size:19px;font-weight:bold;color:#ffd84d}
-.secondary{background:#183452;border:1px solid #385777}
-.top-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:15px}
-.sound-btn{padding:9px 12px;font-size:13px}
-.footer{color:#7890ac;font-size:12px;margin-top:25px}
-.goal-celebration{animation:goalPop .7s ease-in-out;color:#00ff88!important;text-shadow:0 0 15px #00ff88}
-@keyframes goalPop{0%{transform:scale(1)}50%{transform:scale(1.35)}100%{transform:scale(1)}}
-.round-tag{color:#8fcaff;font-weight:bold;letter-spacing:2px;margin:8px 0}
-.result{background:#132945;border:1px solid #385777;border-radius:14px;padding:18px;margin-top:16px}
-.result h2{margin-top:0;color:#ffd84d}
-.result p{color:#d5e5f7}
-.result strong{color:#38aaff}
-#nextRound,#playAgain{width:100%;margin-top:10px}
-@media(max-width:390px){body{padding:12px}.stat strong{font-size:22px}.controls button{font-size:12px}.scoreboard{gap:6px}}
+body{margin:0;padding:20px 12px;min-height:100vh;background:#071426;color:white;font-family:Arial,sans-serif;text-align:center}
+.container{max-width:560px;margin:auto}
+h1{color:#42a5ff;font-size:27px;margin-bottom:5px}
+.subtitle{color:#9bb6d3;margin-top:0;font-size:13px;letter-spacing:2px}
+.panel{background:#10243d;border:1px solid #24466b;border-radius:18px;padding:22px 16px;margin-top:20px}
+.hidden{display:none!important}
+.menu-icon{font-size:55px;margin:10px}
+h2{color:white}
+.description{color:#b7cce2;line-height:1.6;font-size:14px}
+button{border:none;cursor:pointer;font-weight:bold;border-radius:10px;transition:.2s}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:not(:disabled):active{transform:scale(.96)}
+.start-btn{width:100%;padding:15px;margin-top:12px;background:#168cff;color:white;font-size:16px}
+.start-btn:hover{background:#0872d5}
+.secondary{background:#263f5d;color:white;padding:11px 15px;margin-top:10px}
+.mode-btn{width:100%;padding:18px;margin:8px 0;background:#17385c;color:white;border:1px solid #3475ad;font-size:16px}
+.mode-btn:hover{background:#20558a}
+.difficulty-controls{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}
+.difficultyBtn{padding:13px 5px;color:white;background:#263f5d;border:1px solid #45617f}
+.difficultyBtn.selected{background:#087de0;border:2px solid #8dccff}
+.top-bar{display:flex;justify-content:space-between;gap:8px;margin-bottom:15px}
+.top-bar button{padding:9px 12px;color:white;background:#263f5d;font-size:12px}
+.round-tag{color:#55b4ff;font-weight:bold;margin:12px 0;letter-spacing:1px}
+.scoreboard{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:15px 0}
+.stat{background:#071a30;border:1px solid #24466b;border-radius:10px;padding:12px 4px}
+.stat strong{display:block;color:#42a5ff;font-size:22px}
+.stat span{color:#a9bfd6;font-size:11px}
+.pitch{position:relative;height:230px;margin:20px 0;border-radius:14px;overflow:hidden;border:3px solid #63b5ff;background:repeating-linear-gradient(90deg,#12613d 0px,#12613d 45px,#147247 45px,#147247 90px)}
+.goal{position:absolute;top:12px;left:17%;width:66%;height:110px;border:5px solid white;border-bottom:3px solid white;background:repeating-linear-gradient(90deg,transparent 0px,transparent 18px,rgba(255,255,255,.15) 19px,rgba(255,255,255,.15) 20px)}
+.keeper{position:absolute;top:58px;left:50%;transform:translateX(-50%);font-size:42px;z-index:3;transition:left .35s ease}
+.ball{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-size:32px;transition:all .5s ease;z-index:4}
+.shot-buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.shotBtn{padding:14px 5px;background:#087de0;color:white;font-size:13px}
+.shotBtn:hover{background:#005eb5}
+.message{min-height:28px;margin:16px 0 5px;font-weight:bold;color:#ffd166}
+.result{background:#071a30;border:1px solid #3475ad;padding:18px;border-radius:12px;margin-top:18px}
+.result h2{color:#55b4ff}
+.footer{color:#6986a4;font-size:11px;margin-top:25px}
 </style>
 </head>
 <body>
-<div class="game">
-  <div class="brand">QAM PRESENTS</div>
-  <h1>R78 <span class="highlight">FOOTBALL</span></h1>
-  <p class="subtitle">THE PENALTY SHOOTOUT TOURNAMENT</p>
+<div class="container">
+<h1>QAM PRESENTS</h1>
+<p class="subtitle">R78 FOOTBALL GAME · VERSION 6.1</p>
 
-  <section id="menu" class="panel">
-    <div class="menu-icon">⚽</div>
-    <h2>READY FOR THE TOURNAMENT?</h2>
-    <p class="description">Three rounds. Five shots in each round. The goalkeeper gets tougher every round!</p>
-    <p class="description">ROUND 1: EASY · ROUND 2: MEDIUM · ROUND 3: HARD</p>
-    <button class="start-btn" onclick="startTournament()">START TOURNAMENT 🏆</button>
-  </section>
+<section id="menu" class="panel">
+<div class="menu-icon">⚽</div>
+<h2>WELCOME TO R78 FOOTBALL</h2>
+<p class="description">Choose your game mode and prove your penalty skills!</p>
+<button class="mode-btn" onclick="showNormalSetup()">⚽ NORMAL GAME</button>
+<button class="mode-btn" onclick="startTournament()">🏆 TOURNAMENT MODE</button>
+</section>
 
-  <section id="gameScreen" class="hidden">
-    <div class="top-bar">
-      <button class="secondary sound-btn" id="soundBtn" onclick="toggleSound()">🔊 SOUND ON</button>
-      <button class="secondary sound-btn" onclick="showMenu()">MAIN MENU</button>
-    </div>
-    <div class="round-tag" id="roundLabel">ROUND 1 / 3 · EASY</div>
-    <div class="scoreboard">
-      <div class="stat"><strong id="roundGoals">0</strong><span>ROUND GOALS</span></div>
-      <div class="stat"><strong id="shots">0/5</strong><span>SHOTS</span></div>
-      <div class="stat"><strong id="totalGoals">0</strong><span>TOTAL GOALS</span></div>
-      <div class="stat"><strong id="accuracy">0%</strong><span>ACCURACY</span></div>
-      <div class="stat"><strong id="timer">60</strong><span>SECONDS</span></div>
-      <div class="stat"><strong id="bestScore">0</strong><span>BEST TOTAL</span></div>
-    </div>
-    <div class="pitch">
-      <div class="goal"></div>
-      <div class="keeper" id="keeper">🧤</div>
-      <div class="ball" id="ball">⚽</div>
-    </div>
-    <div class="controls">
-      <button class="shotBtn" onclick="shoot('left')">⬅ LEFT</button>
-      <button class="shotBtn" onclick="shoot('center')">CENTER</button>
-      <button class="shotBtn" onclick="shoot('right')">RIGHT ➡</button>
-    </div>
-    <div id="message">Choose your shot!</div>
+<section id="normalSetup" class="panel hidden">
+<h2>NORMAL GAME</h2>
+<p class="description">Choose your difficulty level.</p>
+<div class="difficulty-controls">
+<button class="difficultyBtn selected" onclick="selectDifficulty(0)">EASY</button>
+<button class="difficultyBtn" onclick="selectDifficulty(1)">MEDIUM</button>
+<button class="difficultyBtn" onclick="selectDifficulty(2)">HARD</button>
+</div>
+<p class="description">Five shots. One match. Can you score?</p>
+<button class="start-btn" onclick="startNormalGame()">START NORMAL GAME ⚽</button>
+<button class="secondary" onclick="showMenu()">BACK</button>
+</section>
 
-    <div id="roundResult" class="result hidden">
-      <h2 id="roundResultTitle">ROUND COMPLETE!</h2>
-      <p id="roundResultText"></p>
-      <button id="nextRound" onclick="nextRound()">NEXT ROUND ➜</button>
-    </div>
+<section id="gameScreen" class="panel hidden">
+<div class="top-bar">
+<button onclick="toggleSound()" id="soundButton">🔊 SOUND ON</button>
+<button onclick="showMenu()">MAIN MENU</button>
+</div>
+<div class="round-tag" id="roundLabel">ROUND 1 / 3 · EASY</div>
 
-    <div id="championScreen" class="result hidden">
-      <h2>🏆 TOURNAMENT COMPLETE!</h2>
-      <p id="championText"></p>
-      <button id="playAgain" onclick="startTournament()">PLAY TOURNAMENT AGAIN ↻</button>
-    </div>
-  </section>
+<div class="scoreboard">
+<div class="stat"><strong id="roundGoals">0</strong><span>GOALS</span></div>
+<div class="stat"><strong id="shots">0/5</strong><span>SHOTS</span></div>
+<div class="stat"><strong id="totalGoals">0</strong><span>TOTAL GOALS</span></div>
+<div class="stat"><strong id="accuracy">0%</strong><span>ACCURACY</span></div>
+<div class="stat"><strong id="timer">60</strong><span>TIME</span></div>
+<div class="stat"><strong id="bestScore">0</strong><span>BEST SCORE</span></div>
+</div>
 
-  <div class="footer">R78 FOOTBALL GAME · CREATED BY QANBER ALI MUGHAL
-    <p>Creating My Own Legacy.</p>
-  </div>
+<div class="pitch">
+<div class="goal"></div>
+<div class="keeper" id="keeper">🧤</div>
+<div class="ball" id="ball">⚽</div>
+</div>
+
+<p class="description">CHOOSE YOUR SHOT</p>
+<div class="shot-buttons">
+<button class="shotBtn" onclick="shoot('left')">⬅ LEFT</button>
+<button class="shotBtn" onclick="shoot('center')">⬆ CENTER</button>
+<button class="shotBtn" onclick="shoot('right')">RIGHT ➡</button>
+</div>
+<p class="message" id="message">GET READY!</p>
+
+<div id="roundResult" class="result hidden">
+<h2 id="roundResultTitle">ROUND COMPLETE!</h2>
+<p id="roundResultText"></p>
+<button id="nextRound" class="start-btn" onclick="nextRound()">NEXT ROUND</button>
+</div>
+
+<div id="normalResult" class="result hidden">
+<h2>NORMAL GAME COMPLETE!</h2>
+<p id="normalResultText"></p>
+<button class="start-btn" onclick="startNormalGame()">PLAY AGAIN</button>
+<button class="secondary" onclick="showMenu()">MAIN MENU</button>
+</div>
+
+<div id="championScreen" class="result hidden">
+<h2>🏆 TOURNAMENT COMPLETE!</h2>
+<p id="championText"></p>
+<button class="start-btn" onclick="startTournament()">PLAY AGAIN</button>
+<button class="secondary" onclick="showMenu()">MAIN MENU</button>
+</div>
+</section>
+
+<p class="footer">R78 FOOTBALL GAME · CREATED BY QANBER ALI MUGHAL · QAM</p>
 </div>
 
 <script>
-let round = 1;
-let roundGoals = 0;
-let totalGoals = 0;
-let shots = 0;
-let totalShots = 0;
-let timeLeft = 60;
-let bestScore = Number(localStorage.getItem("r78TournamentBest")) || 0;
-let timerInterval = null;
-let playing = false;
-let soundEnabled = true;
-let audioContext = null;
-let lastShotDirection = null;
-let sameDirectionCount = 0;
+let gameMode="tournament";
+let round=1;
+let normalDifficulty=0;
+let roundGoals=0;
+let totalGoals=0;
+let shots=0;
+let totalShots=0;
+let timeLeft=60;
+let bestScore=0;
+let timerInterval;
+let playing=false;
+let soundEnabled=true;
+let audioContext;
+let shotHistory=[];
+let lastShotDirection="";
 
-const menu = document.getElementById("menu");
-const gameScreen = document.getElementById("gameScreen");
-const ball = document.getElementById("ball");
-const keeper = document.getElementById("keeper");
-const message = document.getElementById("message");
-document.getElementById("bestScore").textContent = bestScore;
+const roundNames=["EASY","MEDIUM","HARD"];
+const saveChances=[0.15,0.32,0.48];
 
-const roundNames = ["EASY", "MEDIUM", "HARD"];
-const saveChances = [0.20, 0.33, 0.50];
+const menu=document.getElementById("menu");
+const normalSetup=document.getElementById("normalSetup");
+const gameScreen=document.getElementById("gameScreen");
+const ball=document.getElementById("ball");
+const keeper=document.getElementById("keeper");
+const message=document.getElementById("message");
 
-function playEffect(notes) {
-  if (!soundEnabled) return;
-  try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    if (!audioContext) audioContext = new AudioContextClass();
-    if (audioContext.state === "suspended") audioContext.resume();
-
-    notes.forEach((note, index) => {
-      const oscillator = audioContext.createOscillator();
-      const gain = audioContext.createGain();
-      const startTime = audioContext.currentTime + index * 0.14;
-      oscillator.type = "sine";
-      oscillator.frequency.value = note;
-      gain.gain.setValueAtTime(0.13, startTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.28);
-      oscillator.connect(gain);
-      gain.connect(audioContext.destination);
-      oscillator.start(startTime);
-      oscillator.stop(startTime + 0.28);
-    });
-  } catch (error) {
-    console.log("Audio unavailable");
-  }
+function playEffect(notes){
+if(!soundEnabled)return;
+try{
+const AC=window.AudioContext||window.webkitAudioContext;
+if(!audioContext)audioContext=new AC();
+notes.forEach((note,index)=>{
+const oscillator=audioContext.createOscillator();
+const gain=audioContext.createGain();
+oscillator.connect(gain);
+gain.connect(audioContext.destination);
+oscillator.frequency.value=note;
+oscillator.type="sine";
+const start=audioContext.currentTime+index*.12;
+gain.gain.setValueAtTime(.12,start);
+gain.gain.exponentialRampToValueAtTime(.001,start+.18);
+oscillator.start(start);
+oscillator.stop(start+.18);
+});
+}catch(error){}
 }
 
-function toggleSound() {
-  soundEnabled = !soundEnabled;
-  document.getElementById("soundBtn").textContent =
-    soundEnabled ? "🔊 SOUND ON" : "🔇 SOUND OFF";
-}
+function toggleSound(){
+    soundEnabled = !soundEnabled;
 
-function startTournament() {
-  clearInterval(timerInterval);
-  round = 1;
-  roundGoals = 0;
-  totalGoals = 0;
-  totalShots = 0;
-  menu.classList.add("hidden");
-  gameScreen.classList.remove("hidden");
-  document.getElementById("championScreen").classList.add("hidden");
-  document.getElementById("roundResult").classList.add("hidden");
-  beginRound();
-}
+    const soundBtn = document.querySelector("#gameScreen #soundBtn");
 
-function beginRound() {
-  clearInterval(timerInterval);
-  roundGoals = 0;
-  shots = 0;
-  timeLeft = 60;
-  playing = true;
-  lastShotDirection = null;
-  sameDirectionCount = 0;
-  ball.className = "ball";
-  keeper.style.left = "50%";
-  keeper.style.transform = "translateX(-50%)";
-  document.getElementById("roundResult").classList.add("hidden");
-  document.getElementById("championScreen").classList.add("hidden");
-  document.getElementById("roundLabel").textContent =
-    `ROUND ${round} / 3 · ${roundNames[round - 1]}`;
-  message.textContent = "Choose your shot!";
-  updateScoreboard();
-  disableButtons(false);
-  document.getElementById("timer").textContent = timeLeft;
-  timerInterval = setInterval(() => {
-    if (!playing) return;
-    timeLeft--;
-    document.getElementById("timer").textContent = timeLeft;
-    if (timeLeft <= 0) finishRound("TIME UP!");
-  }, 1000);
-}
-
-function shoot(direction) {
-  if (!playing) return;
-  playing = false;
-  disableButtons(true);
-
-  if (direction === lastShotDirection) sameDirectionCount++;
-  else sameDirectionCount = 1;
-  lastShotDirection = direction;
-
-  const baseChance = saveChances[round - 1];
-  const learningBonus = Math.min((sameDirectionCount - 1) * 0.12, 0.24);
-  const saveChance = Math.min(baseChance + learningBonus, 0.75);
-  const directions = ["left", "center", "right"];
-  let keeperDirection;
-
-  if (Math.random() < saveChance) {
-    keeperDirection = direction;
-  } else {
-    const alternatives = directions.filter(item => item !== direction);
-    keeperDirection = alternatives[Math.floor(Math.random() * alternatives.length)];
-  }
-
-  ball.className = "ball";
-  void ball.offsetWidth;
-  ball.classList.add("shoot-" + direction);
-
-  keeper.style.left = keeperDirection === "left" ? "30%" :
-    keeperDirection === "right" ? "70%" : "50%";
-  keeper.style.transform = keeperDirection === "center"
-    ? "translateX(-50%) scale(1.2)"
-    : "translateX(-50%) rotate(" +
-      (keeperDirection === "left" ? "-35deg" : "35deg") + ")";
-
-  shots++;
-  totalShots++;
-
-  setTimeout(() => {
-    if (direction !== keeperDirection) {
-      roundGoals++;
-      totalGoals++;
-      message.textContent = "GOOOAL! 🔥";
-      message.classList.remove("goal-celebration");
-      void message.offsetWidth;
-      message.classList.add("goal-celebration");
-      playEffect([660, 880, 1100]);
-      if (totalGoals > bestScore) {
-        bestScore = totalGoals;
-        localStorage.setItem("r78TournamentBest", String(bestScore));
-      }
-    } else {
-      message.textContent = "SAVED! 🧤";
-      playEffect([500, 350, 250]);
+    if(soundBtn){
+        soundBtn.innerHTML = soundEnabled
+            ? "🔊 SOUND ON"
+            : "🔇 SOUND OFF";
     }
-    updateScoreboard();
 
-    if (shots >= 5) {
-      finishRound("ROUND COMPLETE!");
-    } else {
-      playing = true;
-      disableButtons(false);
+    if(soundEnabled){
+        playEffect([600,800,1000]);
     }
-  }, 650);
 }
 
-function finishRound(reason) {
-  clearInterval(timerInterval);
-  playing = false;
-  disableButtons(true);
-  message.textContent = reason;
-  document.getElementById("roundResultTitle").textContent =
-    `ROUND ${round} ${reason === "TIME UP!" ? "FINISHED" : "COMPLETE"}!`;
-  document.getElementById("roundResultText").textContent =
-    `You scored ${roundGoals} goal(s) from ${shots} shot(s). Tournament total: ${totalGoals}.`;
-  document.getElementById("roundResult").classList.remove("hidden");
-
-  if (round === 3) {
-    document.getElementById("nextRound").classList.add("hidden");
-    document.getElementById("championScreen").classList.remove("hidden");
-    document.getElementById("championText").textContent =
-      `Final score: ${totalGoals} goals from ${totalShots} shots. Best tournament score: ${bestScore}.`;
-    playEffect([523, 659, 784, 1047]);
-  } else {
-    document.getElementById("nextRound").classList.remove("hidden");
-    playEffect([523, 659, 784]);
-  }
-  updateScoreboard();
+function selectDifficulty(level){
+normalDifficulty=level;
+document.querySelectorAll(".difficultyBtn").forEach((button,index)=>{
+button.classList.toggle("selected",index===level);
+});
 }
 
-function nextRound() {
-  if (round >= 3) return;
-  round++;
-  beginRound();
+function showNormalSetup(){
+clearInterval(timerInterval);
+playing=false;
+menu.classList.add("hidden");
+normalSetup.classList.remove("hidden");
+gameScreen.classList.add("hidden");
 }
 
-function updateScoreboard() {
-  document.getElementById("roundGoals").textContent = roundGoals;
-  document.getElementById("shots").textContent = shots + "/5";
-  document.getElementById("totalGoals").textContent = totalGoals;
-  document.getElementById("accuracy").textContent =
-    totalShots === 0 ? "0%" : Math.round(totalGoals / totalShots * 100) + "%";
-  document.getElementById("bestScore").textContent = bestScore;
+function showMenu(){
+clearInterval(timerInterval);
+playing=false;
+menu.classList.remove("hidden");
+normalSetup.classList.add("hidden");
+gameScreen.classList.add("hidden");
+document.getElementById("roundResult").classList.add("hidden");
+document.getElementById("normalResult").classList.add("hidden");
+document.getElementById("championScreen").classList.add("hidden");
 }
 
-function disableButtons(disabled) {
-  document.querySelectorAll(".shotBtn").forEach(button => {
-    button.disabled = disabled;
-  });
+function startNormalGame(){
+gameMode="normal";
+round=1;
+totalGoals=0;
+totalShots=0;
+bestScore=Number(localStorage.getItem("r78NormalBest"))||0;
+normalSetup.classList.add("hidden");
+menu.classList.add("hidden");
+gameScreen.classList.remove("hidden");
+beginRound();
 }
 
-function showMenu() {
-  clearInterval(timerInterval);
-  playing = false;
-  gameScreen.classList.add("hidden");
-  menu.classList.remove("hidden");
+function startTournament(){
+gameMode="tournament";
+round=1;
+totalGoals=0;
+totalShots=0;
+bestScore=Number(localStorage.getItem("r78TournamentBest"))||0;
+menu.classList.add("hidden");
+normalSetup.classList.add("hidden");
+gameScreen.classList.remove("hidden");
+beginRound();
+}
+
+function beginRound(){
+clearInterval(timerInterval);
+const difficulty=gameMode==="normal"?normalDifficulty:round-1;
+roundGoals=0;
+shots=0;
+timeLeft=60;
+playing=true;
+shotHistory=[];
+lastShotDirection="";
+document.getElementById("roundResult").classList.add("hidden");
+document.getElementById("normalResult").classList.add("hidden");
+document.getElementById("championScreen").classList.add("hidden");
+document.getElementById("roundLabel").textContent=gameMode==="normal"?"NORMAL GAME · "+roundNames[difficulty]:"ROUND "+round+" / 3 · "+roundNames[difficulty];
+message.textContent="GET READY!";
+message.style.color="#ffd166";
+ball.style.left="50%";
+ball.style.bottom="18px";
+keeper.style.left="50%";
+updateScoreboard();
+disableButtons(false);
+
+timerInterval=setInterval(()=>{
+if(!playing)return;
+timeLeft--;
+document.getElementById("timer").textContent=timeLeft;
+if(timeLeft<=0){
+if(gameMode==="normal")finishNormalGame("TIME UP!");
+else finishRound("TIME UP!");
+}
+},1000);
+}
+
+/* Goalkeeper studies recent shot patterns.
+   Easy: mostly random.
+   Medium: sometimes predicts the most-used direction.
+   Hard: uses recent patterns more often. */
+
+function predictKeeperDirection(difficulty, direction) {
+    const directions = ["left", "center", "right"];
+    const counts = { left: 0, center: 0, right: 0 };
+
+    shotHistory.forEach(shot => counts[shot]++);
+
+    const mostUsed = directions.reduce((a, b) =>
+        counts[a] >= counts[b] ? a : b
+    );
+
+    let predictionChance = [0.08, 0.40, 0.72][difficulty];
+
+    if (direction === lastShotDirection) {
+        predictionChance += 0.15;
+    }
+
+    if (shotHistory.length === 0 || Math.random() > predictionChance) {
+        return directions[Math.floor(Math.random() * 3)];
+    }
+
+    return mostUsed;
+}
+
+
+function shoot(direction){
+if(!playing||shots>=5)return;
+playing=false;
+disableButtons(true);
+
+const difficulty=gameMode==="normal"?normalDifficulty:round-1;
+const keeperDirection=predictKeeperDirection(difficulty);
+shotHistory.push(direction);
+
+let saveChance=saveChances[difficulty];
+
+/* Repeating the same shot makes the keeper more alert. */
+if(direction===lastShotDirection){
+saveChance+=0.10;
+}
+lastShotDirection=direction;
+
+const positions={left:"25%",center:"50%",right:"75%"};
+ball.style.left=positions[direction];
+ball.style.bottom="135px";
+keeper.style.left=positions[keeperDirection];
+
+shots++;
+totalShots++;
+
+setTimeout(()=>{
+if(direction!==keeperDirection){
+roundGoals++;
+totalGoals++;
+message.textContent="⚽ GOAL! AMAZING SHOT!";
+message.style.color="#65f59a";
+playEffect([520,660,800]);
+
+const key=gameMode==="normal"?"r78NormalBest":"r78TournamentBest";
+if(totalGoals>bestScore){
+bestScore=totalGoals;
+localStorage.setItem(key,bestScore);
+}
+}else{
+message.textContent="🧤 SAVED! THE GOALKEEPER BLOCKED IT!";
+message.style.color="#ffd166";
+playEffect([180,140,100]);
+}
+
+updateScoreboard();
+
+if(shots>=5){
+if(gameMode==="normal")finishNormalGame("FIVE SHOTS COMPLETED!");
+else finishRound("FIVE SHOTS COMPLETED!");
+}else{
+ball.style.left="50%";
+ball.style.bottom="18px";
+keeper.style.left="50%";
+playing=true;
+disableButtons(false);
+}
+},650);
+}
+
+function finishNormalGame(reason){
+clearInterval(timerInterval);
+playing=false;
+disableButtons(true);
+const accuracy=totalShots?Math.round(totalGoals/totalShots*100):0;
+document.getElementById("normalResultText").textContent=
+"Goals: "+totalGoals+" | Shots: "+totalShots+" | Accuracy: "+accuracy+"% | Best Score: "+bestScore+" · "+reason;
+document.getElementById("normalResult").classList.remove("hidden");
+message.textContent="MATCH FINISHED!";
+playEffect([520,660,800]);
+}
+
+function finishRound(reason){
+clearInterval(timerInterval);
+playing=false;
+disableButtons(true);
+const result=document.getElementById("roundResult");
+document.getElementById("roundResultTitle").textContent=roundNames[round-1]+" ROUND COMPLETE!";
+document.getElementById("roundResultText").textContent="Goals: "+roundGoals+" / 5 · Total Goals: "+totalGoals+" · "+reason;
+result.classList.remove("hidden");
+
+if(round===3){
+result.classList.add("hidden");
+document.getElementById("championText").textContent="FINAL SCORE: "+totalGoals+" GOALS · BEST SCORE: "+bestScore;
+document.getElementById("championScreen").classList.remove("hidden");
+playEffect([520,660,800,1000]);
+}else{
+document.getElementById("nextRound").textContent="START "+roundNames[round]+" ROUND";
+playEffect([440,550]);
+}
+}
+
+function nextRound(){
+if(round<3){
+round++;
+beginRound();
+}
+}
+
+function updateScoreboard(){
+document.getElementById("roundGoals").textContent=roundGoals;
+document.getElementById("shots").textContent=shots+"/5";
+document.getElementById("totalGoals").textContent=totalGoals;
+const accuracy=totalShots?Math.round(totalGoals/totalShots*100):0;
+document.getElementById("accuracy").textContent=accuracy+"%";
+document.getElementById("timer").textContent=timeLeft;
+document.getElementById("bestScore").textContent=bestScore;
+}
+
+function disableButtons(disabled){
+document.querySelectorAll(".shotBtn").forEach(button=>{
+button.disabled=disabled;
+});
 }
 </script>
 </body>
