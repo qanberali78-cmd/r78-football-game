@@ -59,6 +59,7 @@ button:not(:disabled):active{transform:scale(.96)}
 <p class="description">Choose your game mode and prove your penalty skills!</p>
 <button class="mode-btn" onclick="showNormalSetup()">⚽ NORMAL GAME</button>
 <button class="mode-btn" onclick="startTournament()">🏆 TOURNAMENT MODE</button>
+<button class="mode-btn" onclick="showGoalkeeperSetup()">🧤 GOALKEEPER MODE</button>
 </section>
 
 <section id="normalSetup" class="panel hidden">
@@ -73,6 +74,42 @@ button:not(:disabled):active{transform:scale(.96)}
 <button class="start-btn" onclick="startNormalGame()">START NORMAL GAME ⚽</button>
 <button class="secondary" onclick="showMenu()">BACK</button>
 </section>
+
+
+<section id="goalkeeperSetup" class="panel hidden">
+    <h2>GOALKEEPER MODE 🧤</h2>
+
+    <p class="description">
+        Defend your goal! Save 5 penalty shots.
+    </p>
+
+    <div class="difficulty-controls">
+        <button class="difficultyBtn selected" onclick="selectDifficulty(0)">
+            EASY
+        </button>
+
+        <button class="difficultyBtn" onclick="selectDifficulty(1)">
+            MEDIUM
+        </button>
+
+        <button class="difficultyBtn" onclick="selectDifficulty(2)">
+            HARD
+        </button>
+    </div>
+
+    <p class="description">
+        Dive LEFT, CENTER or RIGHT to save the shot.
+    </p>
+
+    <button class="start-btn" onclick="startGoalkeeperGame()">
+        START GOALKEEPER MODE 🧤
+    </button>
+
+    <button class="secondary" onclick="showMenu()">
+        BACK
+    </button>
+</section>
+
 
 <section id="gameScreen" class="panel hidden">
 <div class="top-bar">
@@ -117,6 +154,19 @@ button:not(:disabled):active{transform:scale(.96)}
 <button class="secondary" onclick="showMenu()">MAIN MENU</button>
 </div>
 
+<div id="goalkeeperResult" class="result hidden">
+    <h2>GOALKEEPER MATCH COMPLETE!</h2>
+    <p id="goalkeeperResultText"></p>
+
+    <button class="start-btn" onclick="startGoalkeeperGame()">
+        PLAY AGAIN
+    </button>
+
+    <button class="secondary" onclick="showMenu()">
+        MAIN MENU
+    </button>
+</div>
+
 <div id="championScreen" class="result hidden">
 <h2>🏆 TOURNAMENT COMPLETE!</h2>
 <p id="championText"></p>
@@ -150,6 +200,9 @@ const saveChances=[0.15,0.32,0.48];
 
 const menu=document.getElementById("menu");
 const normalSetup=document.getElementById("normalSetup");
+const goalkeeperSetup=document.getElementById("goalkeeperSetup");
+let opponentShotDirection="";
+let totalSaves=0;
 const gameScreen=document.getElementById("gameScreen");
 const ball=document.getElementById("ball");
 const keeper=document.getElementById("keeper");
@@ -176,21 +229,21 @@ oscillator.stop(start+.18);
 }catch(error){}
 }
 
+
 function toggleSound(){
     soundEnabled = !soundEnabled;
 
-    const soundBtn = document.querySelector("#gameScreen #soundBtn");
+    const soundBtn = document.getElementById("soundButton");
 
     if(soundBtn){
-        soundBtn.innerHTML = soundEnabled
-            ? "🔊 SOUND ON"
-            : "🔇 SOUND OFF";
+        soundBtn.textContent = soundEnabled ? "🔊 SOUND ON" : "🔇 SOUND OFF";
     }
 
     if(soundEnabled){
-        playEffect([600,800,1000]);
+        playEffect(600, 0.1);
     }
 }
+
 
 function selectDifficulty(level){
 normalDifficulty=level;
@@ -204,14 +257,45 @@ clearInterval(timerInterval);
 playing=false;
 menu.classList.add("hidden");
 normalSetup.classList.remove("hidden");
+goalkeeperSetup.classList.add("hidden");
 gameScreen.classList.add("hidden");
 }
+
+
+function showGoalkeeperSetup(){
+    clearInterval(timerInterval);
+    playing = false;
+
+    menu.classList.add("hidden");
+    normalSetup.classList.add("hidden");
+    goalkeeperSetup.classList.remove("hidden");
+    gameScreen.classList.add("hidden");
+}
+
+function startGoalkeeperGame(){
+    gameMode = "goalkeeper";
+    round = 1;
+    totalGoals = 0;
+    totalSaves = 0;
+    totalShots = 0;
+    bestScore = Number(localStorage.getItem("r78GoalkeeperBest")) || 0;
+
+    menu.classList.add("hidden");
+    normalSetup.classList.add("hidden");
+    goalkeeperSetup.classList.add("hidden");
+    gameScreen.classList.remove("hidden");
+
+    beginRound();
+}
+
 
 function showMenu(){
 clearInterval(timerInterval);
 playing=false;
 menu.classList.remove("hidden");
 normalSetup.classList.add("hidden");
+goalkeeperSetup.classList.add("hidden");
+document.getElementById("goalkeeperResult").classList.add("hidden");
 gameScreen.classList.add("hidden");
 document.getElementById("roundResult").classList.add("hidden");
 document.getElementById("normalResult").classList.add("hidden");
@@ -225,6 +309,7 @@ totalGoals=0;
 totalShots=0;
 bestScore=Number(localStorage.getItem("r78NormalBest"))||0;
 normalSetup.classList.add("hidden");
+goalkeeperSetup.classList.add("hidden");
 menu.classList.add("hidden");
 gameScreen.classList.remove("hidden");
 beginRound();
@@ -237,6 +322,7 @@ totalGoals=0;
 totalShots=0;
 bestScore=Number(localStorage.getItem("r78TournamentBest"))||0;
 menu.classList.add("hidden");
+goalkeeperSetup.classList.add("hidden");
 normalSetup.classList.add("hidden");
 gameScreen.classList.remove("hidden");
 beginRound();
@@ -244,7 +330,7 @@ beginRound();
 
 function beginRound(){
 clearInterval(timerInterval);
-const difficulty=gameMode==="normal"?normalDifficulty:round-1;
+const difficulty=(gameMode==="normal" || gameMode==="goalkeeper") ? normalDifficulty : round-1;
 roundGoals=0;
 shots=0;
 timeLeft=60;
@@ -253,8 +339,16 @@ shotHistory=[];
 lastShotDirection="";
 document.getElementById("roundResult").classList.add("hidden");
 document.getElementById("normalResult").classList.add("hidden");
+document.getElementById("goalkeeperResult").classList.add("hidden");
 document.getElementById("championScreen").classList.add("hidden");
-document.getElementById("roundLabel").textContent=gameMode==="normal"?"NORMAL GAME · "+roundNames[difficulty]:"ROUND "+round+" / 3 · "+roundNames[difficulty];
+
+document.getElementById("roundLabel").textContent =
+    gameMode === "normal"
+        ? "NORMAL GAME · " + roundNames[difficulty]
+        : gameMode === "goalkeeper"
+            ? "GOALKEEPER MODE · " + roundNames[difficulty]
+            : "ROUND " + round + " / 3 · " + roundNames[difficulty];
+
 message.textContent="GET READY!";
 message.style.color="#ffd166";
 ball.style.left="50%";
@@ -263,15 +357,24 @@ keeper.style.left="50%";
 updateScoreboard();
 disableButtons(false);
 
+
 timerInterval=setInterval(()=>{
-if(!playing)return;
-timeLeft--;
-document.getElementById("timer").textContent=timeLeft;
-if(timeLeft<=0){
-if(gameMode==="normal")finishNormalGame("TIME UP!");
-else finishRound("TIME UP!");
-}
+    if(!playing)return;
+
+    timeLeft--;
+    document.getElementById("timer").textContent=timeLeft;
+
+    if(timeLeft<=0){
+        if(gameMode==="normal"){
+            finishNormalGame("TIME UP!");
+        }else if(gameMode==="goalkeeper"){
+            finishGoalkeeperGame();
+        }else{
+            finishRound("TIME UP!");
+        }
+    }
 },1000);
+
 }
 
 /* Goalkeeper studies recent shot patterns.
@@ -305,6 +408,10 @@ function predictKeeperDirection(difficulty, direction) {
 
 function shoot(direction){
 if(!playing||shots>=5)return;
+if(gameMode==="goalkeeper"){
+    dive(direction);
+    return;
+}
 playing=false;
 disableButtons(true);
 
@@ -350,8 +457,14 @@ playEffect([180,140,100]);
 updateScoreboard();
 
 if(shots>=5){
-if(gameMode==="normal")finishNormalGame("FIVE SHOTS COMPLETED!");
-else finishRound("FIVE SHOTS COMPLETED!");
+if(gameMode==="normal"){
+    finishNormalGame();
+}else if(gameMode==="goalkeeper"){
+    finishGoalkeeperGame();
+}else{
+    finishRound();
+}
+finishRound("FIVE SHOTS COMPLETED!");
 }else{
 ball.style.left="50%";
 ball.style.bottom="18px";
@@ -361,6 +474,91 @@ disableButtons(false);
 }
 },650);
 }
+
+
+
+function dive(direction){
+    if(!playing) return;
+
+    disableButtons(true);
+
+    const directions = ["left", "center", "right"];
+    opponentShotDirection = directions[Math.floor(Math.random() * 3)];
+
+    keeper.style.left =
+        direction === "left" ? "20%" :
+        direction === "right" ? "80%" : "50%";
+
+    ball.style.left =
+        opponentShotDirection === "left" ? "20%" :
+        opponentShotDirection === "right" ? "80%" : "50%";
+
+    ball.style.bottom = "75%";
+
+    shots++;
+    totalShots++;
+
+    setTimeout(function(){
+        if(direction === opponentShotDirection){
+            roundGoals++;
+            totalGoals++;
+            totalSaves++;
+
+            message.textContent = "🧤 GREAT SAVE!";
+            message.style.color = "#06d6a0";
+
+            playEffect(700, 0.15);
+
+            if(totalSaves > bestScore){
+                bestScore = totalSaves;
+                localStorage.setItem("r78GoalkeeperBest", bestScore);
+            }
+        } else {
+            message.textContent = "⚽ GOAL! YOU MISSED THE SAVE!";
+            message.style.color = "#ff4d6d";
+
+            playEffect(200, 0.2);
+        }
+
+        updateScoreboard();
+
+        if(shots >= 5){
+            finishGoalkeeperGame();
+            return;
+        }
+
+        ball.style.left = "50%";
+        ball.style.bottom = "18px";
+        keeper.style.left = "50%";
+
+        disableButtons(false);
+    }, 650);
+}
+
+
+
+function finishGoalkeeperGame(){
+    clearInterval(timerInterval);
+    playing = false;
+    disableButtons(true);
+
+    const saveRate = totalShots
+        ? Math.round((totalSaves / totalShots) * 100)
+        : 0;
+
+    document.getElementById("goalkeeperResultText").textContent =
+        "Saves: " + totalSaves + " / " + totalShots +
+        " | Save Rate: " + saveRate + "%";
+
+    document.getElementById("goalkeeperResult").classList.remove("hidden");
+
+    message.textContent = "MATCH FINISHED!";
+    message.style.color = "#ffd166";
+
+    playEffect(500, 0.2);
+}
+
+
 
 function finishNormalGame(reason){
 clearInterval(timerInterval);
